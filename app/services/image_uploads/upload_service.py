@@ -21,6 +21,7 @@ class UploadService:
     ):
         print("USER",user)
 
+
         uploaded_cloudinary_ids = []
 
         try:

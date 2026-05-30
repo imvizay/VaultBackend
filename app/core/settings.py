@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings,SettingsConfigDict
 from typing import List
 import os
 # dotenv module
@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     PROJECT_NAME : str = "Gallery Vault"
     VERSION : str = '0.0.1'
 
-
+   
     # SERVER
     DEBUG : bool = os.getenv("DEBUG")
     DATABASE_URL : str = os.getenv('DATABASE_URL')
@@ -33,9 +33,10 @@ class Settings(BaseSettings):
     CLOUDINARY_SECRET : str = os.getenv('CLOUDINARY_SECRET')
 
     # ENV CONFIG
-    model_config={
-        'env_file':'.env',
-        'case_sensitive':True
-    }
+    model_config=SettingsConfigDict(
+        env_file='.env',
+        case_sensitive=True,
+        extra='ignore'
+    )
 
 settings = Settings()

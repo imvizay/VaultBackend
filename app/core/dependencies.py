@@ -1,36 +1,14 @@
 from fastapi import Header,HTTPException,status,Depends
 from sqlalchemy.orm import Session
 from firebase_admin import auth
-from fastapi.security import HTTPBearer,HTTPAuthorizationCredentials
 from app.models import User
+from fastapi.security import HTTPBearer,HTTPAuthorizationCredentials
+
 from app.core.database import get_db
 security = HTTPBearer()
 
-async def sync_auth_to_db_user(decoded_token,db):
-    
-    firebase_uid = decoded_token['uid']
-    email = decoded_token['email']
 
-    user = ( db.query(User)
-            .filter(User.firebase_uid == firebase_uid) 
-            .first()
-        )
-    
-    if user:
-        return user
 
-    user = User(
-        firebase_uid=firebase_uid,
-        email=email,
-        username=email.split("@")[0],
-        provider="firebase"
-    )
-
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-
-    return user
 
 async def verify_firebase_token(
     credentials : HTTPAuthorizationCredentials = Depends(security),
@@ -46,13 +24,8 @@ async def verify_firebase_token(
         print("token",token)
         
         decoded_token = auth.verify_id_token(token)
-
-        user = await sync_auth_to_db_user(
-            decoded_token,
-            db
-        )
         
-        return user
+        return decoded_token
     
     except Exception as e:
         print("FIREBASE VERIFY ERROR",e)
@@ -61,3 +34,24 @@ async def verify_firebase_token(
             detail='invalid firebase token'
         )
 
+
+
+async def get_current_user(
+    decoded_token=Depends(verify_firebase_token),
+    db: Session = Depends(get_db)
+):
+    user = (
+        db.query(User)
+        .filter(
+            User.firebase_uid == decoded_token["uid"]
+        )
+        .first()
+    )
+
+    if not user:
+        raise HTTPException(
+            404,
+            "User not found"
+        )
+
+    return user
