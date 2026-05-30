@@ -61,3 +61,12 @@ async def images(
 
     return images
 
+
+@router.post('/remove-image/{image_id}')
+async def remove_image(
+    image_id: int,
+    db: Session = Depends(get_db),
+    user: dict = Depends(verify_firebase_token)
+):
+    service = ImageService(db)
+    return await service.remove_image(image_id, user)
