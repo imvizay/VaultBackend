@@ -14,15 +14,13 @@ class Settings(BaseSettings):
 
 
     # SERVER
-    DEBUG : bool = True
-    PSQL_DATABASE_URL : str = os.getenv('PSQL_DATABASE_URL')
+    DEBUG : bool = os.getenv("DEBUG")
+    DATABASE_URL : str = os.getenv('DATABASE_URL')
 
     # JWT AUTH
 
     # CORS ORIGINS
-    ALLOWED_ORIGINS : List[str] = [
-        'http://localhost:5173'
-    ]
+    FRONTEND_URL : str = os.getenv('FRONTEND_URL')
 
     # FIREBASE
     FIREBASE_PROJECT_ID     : str = os.getenv("FIREBASE_PROJECT_ID")
@@ -30,18 +28,14 @@ class Settings(BaseSettings):
 
     # CLOUDINARY
     
-    CLOUDINARY_CLOUD_NAME   : str = os.getenv('CLOUDINARY_CLOUD_NAME')
-    CLOUDINARY_CLOUD_API    : str = os.getenv('CLOUDINARY_CLOUD_API')
-    CLOUDINARY_CLOUD_SECRET : str = os.getenv('CLOUDINARY_CLOUD_SECRET')
+    CLOUDINARY_NAME   : str = os.getenv('CLOUDINARY_NAME')
+    CLOUDINARY_API_KEY    : str = os.getenv('CLOUDINARY_API_KEY')
+    CLOUDINARY_SECRET : str = os.getenv('CLOUDINARY_SECRET')
 
     # ENV CONFIG
     model_config={
         'env_file':'.env',
         'case_sensitive':True
     }
-
-    print("NAME:", CLOUDINARY_CLOUD_NAME)
-    print("API:", CLOUDINARY_CLOUD_API)
-    print("SECRET:", CLOUDINARY_CLOUD_SECRET)
 
 settings = Settings()

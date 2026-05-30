@@ -8,8 +8,9 @@ from .settings import settings
 # Main connection between 
 # FASt API ---> Postgres
 engine = create_engine(
-        settings.PSQL_DATABASE_URL,
-        echo=True
+        settings.DATABASE_URL,
+        echo=settings.DEBUG,
+        pool_pre_ping=True
     )
 
 
