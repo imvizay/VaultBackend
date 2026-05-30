@@ -25,7 +25,7 @@ async def sync_auth_to_db_user(decoded_token,db):
     )
 
     db.add(user)
-    db.commit(user)
+    db.commit()
     db.refresh(user)
 
     return user
