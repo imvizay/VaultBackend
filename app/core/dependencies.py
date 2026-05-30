@@ -21,7 +21,9 @@ async def sync_auth_to_db_user(decoded_token,db):
 
     user = User(
         firebase_uid=firebase_uid,
-        email=email
+        email=email,
+        username=email.split("@")[0],
+        provider="firebase"
     )
 
     db.add(user)
