@@ -32,8 +32,6 @@ async def upload_images(
     db: Session = Depends( get_db )
 ):
 
-    db_user = db.query(User).filter(user.uid == User.firebase_uid)
-
     metadata_json = json.loads(metadata)
 
     print("METADATA JSON",metadata_json)
